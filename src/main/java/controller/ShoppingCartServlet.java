@@ -1,6 +1,9 @@
+package controller;
+
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import model.Cart;
 
 
 /**
@@ -30,15 +35,31 @@ public class ShoppingCartServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("Shopping Cart servlet forwarding");
 		
+		HttpSession session = request.getSession(true);
+		Cart cart;
+   	      synchronized (session) {  // synchronized to prevent concurrent updates
+   	         // Retrieve the shopping cart for this session, if any. Otherwise, create one.
+   	         cart = (Cart) session.getAttribute("cart");
+   	         if (cart == null) {  // No cart, create one.
+   	            cart = new Cart();
+   	            
+   	            // Sample data
+   	            cart.addItem("1984", 0, "Great book", "Dystopian", "Penguin", 10, 5);
+ 	   	        cart.addItem("Sapiens", 1, "History of humanity", "Non Fiction", "Penguin", 20, 10);
+ 	   	    
+   	            session.setAttribute("cart", cart);  // Save it into session
+   	         }
+   	      }
+	    
+   	      
 		try {
 			String action = request.getParameter("action");
-//			String itemID = request.getParameter("itemID");
-//			HttpSession session = request.getSession(true);
-//		    Cart cart = (Cart) session.getAttribute("cart");
-			
+			String itemIDString = request.getParameter("itemID");
+			int itemID = Integer.parseInt(itemIDString);
+
+	   	  
+	 
 			if(action.equals("increase")) {
 				System.out.println("Increase quantity!!!!!");
 				// 1 item added to cart instance
@@ -49,6 +70,7 @@ public class ShoppingCartServlet extends HttpServlet {
 			}
 			if(action.equals("remove")) {
 				System.out.println("Remove item!!!!!");
+				cart.removeItem(itemID);
 				// Entire item removed from cart instance
 			}
 		}
@@ -56,12 +78,18 @@ public class ShoppingCartServlet extends HttpServlet {
 			
 		}
 		
-		
-		
-	
-		RequestDispatcher rd = request.getRequestDispatcher("/jsp/shoppingCartView.jsp");
-		rd.forward(request, response);
-		
+		if(cart.getItems().size() == 0) {
+			response.setContentType("text/html;charset=UTF-8");
+	   	    PrintWriter out = response.getWriter();
+	   	    
+	   	    out.println("<h1>Cart is empty!</h1>");
+	   	    out.println("<br><a href=\"index.html\">Keep Shopping</a>");
+	   	    out.close();
+		}
+		else {
+			RequestDispatcher rd = request.getRequestDispatcher("/jsp/shoppingCartView.jsp");
+			rd.forward(request, response);
+		}
 		
 	}
 
