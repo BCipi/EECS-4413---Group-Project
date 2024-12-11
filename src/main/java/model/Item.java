@@ -8,6 +8,7 @@ public class Item {
 	private String brand;
 	private int price;
 	private int stock;
+	private int qtyOrdered
 	
 	public Item(String n, int i, String d, String c, String b, int p, int s) {
 		this.name = n;
@@ -22,6 +23,14 @@ public class Item {
 	public Item(String name, int id) {
 		this.name = name;
 		this.id = id;
+	}
+
+	public int getQtyOrdered(){
+		return this.qtyOrdered;
+	}
+
+	public void setQtyOrdered(int newQty){
+		this.qtyOrdered = newQty;
 	}
 	
 	public String getName() {
