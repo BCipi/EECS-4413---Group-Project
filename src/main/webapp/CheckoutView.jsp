@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Shipping and Billing Information</title>
 </head>
 <body>
-	<h3>Thank you for Ordering. </h3>
+	<h3>Enter Your Shipping and Billing Information. </h3>
 	
 	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	<%@ page import="controller.*" %>

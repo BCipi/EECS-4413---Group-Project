@@ -34,10 +34,9 @@ public class CheckoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Boolean logedIn = true;
 	    HttpSession session = request.getSession(true);
-	    
-		if (logedIn) {
+	    String account = "" + request.getAttribute("account");
+		if (!(account == null == account.equals(""))) {
 			Database db = new Database(request.getServletContext());
 			Account acc = db.getAccount("test");
 			String billing = acc.getBillingAddress();
@@ -57,6 +56,9 @@ public class CheckoutServlet extends HttpServlet {
 		    int transactionId = 0; //TODO figure out how to track this
 		    Sale sale = new Sale(acc.getName(), itemId, itemName, quantity, transactionId);
 		    session.setAttribute("sale", sale);
+		    
+		    String target = "OrderConfirmation.jsp";
+		    request.getRequestDispatcher(target).forward(request, response);
 		    
 		} else {
 			String target = "LoginPage.jsp";
