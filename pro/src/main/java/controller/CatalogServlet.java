@@ -154,7 +154,7 @@ public class CatalogServlet extends HttpServlet {
             cart.addProduct(productId);
 
             // Redirect to the cart page
-            response.sendRedirect("cart.jsp");
+            response.sendRedirect("cart.jsp");//this line is only a place holder,I build a simple cart.jsp for demo only replace cart.jsp with the latter one you designed
         } catch (NumberFormatException e) {
             throw new ServletException("Invalid product ID", e);
         }
